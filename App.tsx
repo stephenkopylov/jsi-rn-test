@@ -15,6 +15,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -60,10 +61,6 @@ const Section: React.FC<{
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  multiply(1, 2).then(result => {
-    console.log('result = ', result);
-  });
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -71,6 +68,14 @@ const App = () => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <TouchableOpacity
+        onPress={() => {
+          multiply(1, 2).then(result => {
+            console.log('result = ', result);
+          });
+        }}>
+        <View style={{width: 100, height: 100, backgroundColor: 'green'}} />
+      </TouchableOpacity>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
