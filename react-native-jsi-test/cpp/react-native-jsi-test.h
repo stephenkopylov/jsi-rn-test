@@ -6,7 +6,7 @@ using namespace facebook::jsi;
 using namespace std;
 
 namespace example {
-  int multiply(float a, float b);
+  int helloWorld(float a);
   void install(Runtime & jsiRuntime) ;
 }
 
