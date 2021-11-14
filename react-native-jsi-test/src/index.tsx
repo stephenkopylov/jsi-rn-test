@@ -17,6 +17,6 @@ const JsiTest = NativeModules.JsiTest
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return JsiTest.multiply(a, b);
+export function helloWorld(a: string): Promise<number> {
+  return JsiTest.helloWorld(a);
 }
