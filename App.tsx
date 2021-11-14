@@ -19,6 +19,8 @@ import {
   View,
 } from 'react-native';
 
+import {multiply} from 'react-native-jsi-test/src';
+
 import {
   Colors,
   DebugInstructions,
@@ -57,6 +59,10 @@ const Section: React.FC<{
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+
+  multiply(1, 2).then(result => {
+    console.log('result = ', result);
+  });
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
