@@ -38,9 +38,9 @@ public class JsiTestModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void helloWorld(String a, Promise promise) {
-    int ca = nativeHelloWorld(1);
-    promise.resolve(a);
+  public void helloWorld(int a, int b, Promise promise) {
+//    int ca = nativeHelloWorld(1);
+    promise.resolve(a+b);
   }
 
   public void installLib(JavaScriptContextHolder reactContext) {

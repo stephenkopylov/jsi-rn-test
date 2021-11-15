@@ -11,13 +11,14 @@ RCT_EXPORT_MODULE()
 
 // Example method for C++
 // See the implementation of the example module in the `cpp` folder
-RCT_EXPORT_METHOD(helloWorld:(nonnull NSString*)a
+RCT_EXPORT_METHOD(helloWorld:(nonnull NSNumber*)x
+				  andY:(nonnull NSNumber*)y
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withReject:(RCTPromiseRejectBlock)reject)
 {
-//    NSNumber *result = @(example::multiply([a floatValue], [b floatValue]));
+    NSNumber *result = @(x.intValue + y.intValue);
 
-    resolve(a);
+	resolve(result);
 }
 
 +(BOOL)requiresMainQueueSetup{
