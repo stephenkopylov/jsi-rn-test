@@ -4,7 +4,7 @@
 #include "thread-test.hpp"
 #include <ReactCommon/CallInvoker.h>
 #ifdef __ANDROID__
-  #include <TurboModule.h>
+#include <TurboModule.h>
 #else
 #include <ReactCommon/TurboModule.h>
 #endif

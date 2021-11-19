@@ -11,13 +11,16 @@ include_directories(
         ../cpp
         ../../react-native/React
         ../../react-native/React/Base
+        ../../react-native/ReactCommon
+        ../../react-native/ReactCommon/react/nativemodule/core/ReactCommon
         ../../react-native/ReactCommon/jsi
-        ../../react-native/React
-        ../../react-native/React/Base
         ../../react-native/ReactCommon/callinvoker
         ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon
         ../../react-native/ReactCommon/turbomodule/core
         ../../react-native/ReactCommon/turbomodule
+        ../../react-native/React
+        ../../react-native/React/Base
+        ../../react-native/ReactCommon/jsi
 )
 
 find_package(fbjni REQUIRED CONFIG)
@@ -27,7 +30,7 @@ add_library(
         SHARED
         ../../react-native/ReactCommon/jsi/jsi/jsi.cpp
         ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp
-        ../../react-native/ReactCommon/turbomodule/core/TurboModule.cpp
+        ../../react-native/ReactCommon/react/nativemodule/core/ReactCommon/TurboModule.cpp
         ../cpp/react-native-jsi-test.cpp
         ./cpp-adapter.cpp
 )
