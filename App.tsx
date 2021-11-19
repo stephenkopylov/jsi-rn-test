@@ -85,7 +85,7 @@ const App: React.FC = () => {
       <TouchableOpacity
         onPress={() => {
           // @ts-ignore
-          global.helloWorld((result) => {
+          global.exampleModule.helloWorld((result) => {
             console.log("result = ", result);
           });
         }}>

@@ -37,9 +37,8 @@ RCT_EXPORT_METHOD(helloWorld:(nonnull NSNumber*)x
 - (void)installLibrary {
     RCTCxxBridge *cxxBridge = (RCTCxxBridge *)self.bridge;
 
-	
     if (cxxBridge.runtime) {
-		example::install(*(facebook::jsi::Runtime *)cxxBridge.runtime, *cxxBridge.jsCallInvoker);
+		example::install(*(facebook::jsi::Runtime *)cxxBridge.runtime, cxxBridge.jsCallInvoker);
     }
 }
 

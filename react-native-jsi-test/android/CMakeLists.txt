@@ -27,8 +27,17 @@ add_library(
         SHARED
         ../../react-native/ReactCommon/jsi/jsi/jsi.cpp
         ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp
+        ../../react-native/ReactCommon/turbomodule/core/TurboModule.cpp
         ../cpp/react-native-jsi-test.cpp
         ./cpp-adapter.cpp
 )
 
 target_link_libraries(${PACKAGE_NAME} fbjni::fbjni android log)
+
+add_library(
+        turbomodulejsijni
+        # Sets the library as a shared library.
+        SHARED
+        # an empty cpp file
+        ../cpp/empty.cpp
+)

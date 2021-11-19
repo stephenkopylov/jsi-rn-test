@@ -35,7 +35,7 @@ private:
 
         LOG("installNativeJsi");
 
-        example::install(*jsiRuntime, jsCallInvoker);
+        example::install(*jsiRuntime, *jsCallInvoker);
     }
 };
 
