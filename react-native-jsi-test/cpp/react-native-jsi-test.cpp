@@ -1,25 +1,31 @@
 #include "react-native-jsi-test.h"
+#include <thread>
 
 namespace example {
-	int helloWorld(float a) {
-		return a;
-	}
+int helloWorld(float a) {
+	return a;
+}
 
-void install(Runtime & jsiRuntime) {
-	auto helloWorld = Function::createFromHostFunction(jsiRuntime, PropNameID::forAscii(jsiRuntime, "helloWorld"), 0,[](Runtime & runtime,
-		const Value & thisValue, const Value * arguments, size_t count) -> Value {
+void install(Runtime & jsiRuntime) {}
 
-		int x = arguments[0].getNumber();
-		
-		int y = arguments[1].getNumber();
-		
-		int z = x + y;
+void install(Runtime & jsiRuntime, CallInvoker &callInvoker) {
+	auto helloWorld = Function::createFromHostFunction(jsiRuntime, PropNameID::forAscii(jsiRuntime, "helloWorld"), 0,[&callInvoker](Runtime & runtime,
+																														const Value & thisValue, const Value * arguments, size_t count) -> Value {
 
-		string helloworld = "helloworld";
+		auto callback = std::make_shared<Value>((arguments[0].asObject(runtime)));
 
-		arguments[2].getObject(runtime).getFunction(runtime).call(runtime, z);
+		std::thread th { [callback, &runtime, &callInvoker](){
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-		return Value(runtime, String::createFromUtf8(runtime, helloworld));
+			callInvoker.invokeAsync([callback, &runtime]() {
+				string helloworld = "helloworld";
+				callback->asObject(runtime).asFunction(runtime).call(runtime, String::createFromUtf8(runtime, helloworld));
+			});
+		}};
+
+		th.detach();
+
+		return Value::null();
 	});
 
 	jsiRuntime.global().setProperty(jsiRuntime, "helloWorld", move(helloWorld));

@@ -7,20 +7,26 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.bridge.CatalystInstanceImpl;
 
 import com.facebook.react.bridge.JavaScriptContextHolder;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.turbomodule.core.interfaces.CallInvokerHolder;
 
 import android.util.Log;
+
+import java.lang.ref.WeakReference;
 
 @ReactModule(name = JsiTestModule.NAME)
 public class JsiTestModule extends ReactContextBaseJavaModule {
   public static final String NAME = "JsiTest";
+  private final WeakReference<ReactApplicationContext> mContext;
 
   public JsiTestModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    mContext = new WeakReference<>(reactContext);
   }
 
   @Override
@@ -43,8 +49,9 @@ public class JsiTestModule extends ReactContextBaseJavaModule {
     promise.resolve(a+b);
   }
 
-  public void installLib(JavaScriptContextHolder reactContext) {
+  //mContext.get().getCatalystInstance().getJSCallInvokerHolder()
 
+  public void installLib(JavaScriptContextHolder reactContext) {
     if (reactContext.get() != 0) {
       this.nativeInstall(
         reactContext.get()

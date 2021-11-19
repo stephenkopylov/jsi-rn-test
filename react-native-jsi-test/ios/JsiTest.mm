@@ -1,7 +1,11 @@
 #import "JsiTest.h"
 #import <React/RCTBridge+Private.h>
 #import <React/RCTUtils.h>
+#import <ReactCommon/CallInvoker.h>
+//#import <React/CallInvoker.h>
 #import "react-native-jsi-test.h"
+#import "RCTTurboModule.h"
+#import <ReactCommon/RCTTurboModule.h>
 
 @implementation JsiTest
 
@@ -33,8 +37,9 @@ RCT_EXPORT_METHOD(helloWorld:(nonnull NSNumber*)x
 - (void)installLibrary {
     RCTCxxBridge *cxxBridge = (RCTCxxBridge *)self.bridge;
 
+	
     if (cxxBridge.runtime) {
-       example::install(*(facebook::jsi::Runtime *)cxxBridge.runtime);
+		example::install(*(facebook::jsi::Runtime *)cxxBridge.runtime, *cxxBridge.jsCallInvoker);
     }
 }
 
