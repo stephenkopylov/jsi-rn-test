@@ -29,6 +29,7 @@ build/
 local.properties
 *.iml
 *.hprof
+react-native-jsi-test/android/.cxx
 
 # node.js
 #
