@@ -126,7 +126,9 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
+    packagingOptions {
+        pickFirst '**/*.so'
+    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -217,7 +219,7 @@ dependencies {
     }
 
     // To avoid Duplicate Class...
-    implementation(project(':react-native-jsi-test')) {
+    implementation(project(':react-native-jsi-test')) { //important for JSI
         exclude group:'com.facebook.fbjni'
     }
 }

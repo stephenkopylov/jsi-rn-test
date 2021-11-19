@@ -1,20 +1,34 @@
 cmake_minimum_required(VERSION 3.9.0)
 
-set (CMAKE_VERBOSE_MAKEFILE ON)
-set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+#important
+set(CMAKE_CXX_STANDARD 14)
 
-#find_package(fbjni REQUIRED CONFIG)
-
-add_library(cpp
-            SHARED
-            ../cpp/react-native-jsi-test.cpp
-            ../../react-native/ReactCommon/jsi/jsi/jsi.cpp
-            ./cpp-adapter.cpp
-)
+set(build_DIR ${CMAKE_SOURCE_DIR}/build)
+set(PACKAGE_NAME "cpp")  # the name for our library
 
 include_directories(
+        ../cpp
         ../../react-native/React
         ../../react-native/React/Base
         ../../react-native/ReactCommon/jsi
-        ../cpp
+        ../../react-native/React
+        ../../react-native/React/Base
+        ../../react-native/ReactCommon/callinvoker
+        ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon
+        ../../react-native/ReactCommon/turbomodule/core
+        ../../react-native/ReactCommon/turbomodule
 )
+
+find_package(fbjni REQUIRED CONFIG)
+
+add_library(
+        ${PACKAGE_NAME}
+        SHARED
+        ../../react-native/ReactCommon/jsi/jsi/jsi.cpp
+        ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp
+        ../cpp/react-native-jsi-test.cpp
+        ./cpp-adapter.cpp
+)
+
+target_link_libraries(${PACKAGE_NAME} fbjni::fbjni android log)

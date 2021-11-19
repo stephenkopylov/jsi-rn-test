@@ -21,14 +21,15 @@ def safeExtGet(prop, fallback) {
 android {
   // See https://github.com/facebookincubator/fbjni/issues/50
   buildFeatures {
-    prefab true
+    prefab true //important for JSI
   }
   dependencies {
-    implementation 'com.facebook.fbjni:fbjni:0.2.2'
+    implementation 'com.facebook.fbjni:fbjni:0.2.2' //important for JSI
   }
   configurations {
-    all*.exclude module: 'fbjni-java-only'
+    all*.exclude module: 'fbjni-java-only' //important for JSI
   }
+
   compileSdkVersion safeExtGet('JsiTest_compileSdkVersion', 29)
   defaultConfig {
     minSdkVersion safeExtGet('JsiTest_minSdkVersion', 16)
@@ -40,6 +41,7 @@ android {
       cmake {
         cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
         abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+        arguments "-DANDROID_STL=c++_shared" //important for JSI
       }
     }
 
