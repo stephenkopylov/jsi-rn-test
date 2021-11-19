@@ -8,6 +8,7 @@ int helloWorld(float a) {
 
 void install(Runtime & jsiRuntime) {}
 
+#ifndef __ANDROID__
 void install(Runtime & jsiRuntime, CallInvoker &callInvoker) {
 	auto helloWorld = Function::createFromHostFunction(jsiRuntime, PropNameID::forAscii(jsiRuntime, "helloWorld"), 0,[&callInvoker](Runtime & runtime,
 																														const Value & thisValue, const Value * arguments, size_t count) -> Value {
@@ -30,4 +31,5 @@ void install(Runtime & jsiRuntime, CallInvoker &callInvoker) {
 
 	jsiRuntime.global().setProperty(jsiRuntime, "helloWorld", move(helloWorld));
 }
+#endif
 }
