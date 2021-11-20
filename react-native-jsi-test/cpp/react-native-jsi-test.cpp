@@ -1,14 +1,11 @@
 #include "react-native-jsi-test.h"
 #include <thread>
-#include "signal_recovery.h"
 
 static std::shared_ptr <CallInvoker> globalCallInvoker;
 static Runtime *globaRuntime;
 
 namespace example {
     void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
-		
-		signal_catch_init();
 
         globalCallInvoker = callInvoker;
 
@@ -54,13 +51,13 @@ namespace example {
         //	Function callback = args[0].getObject(rt).getFunction(rt);
         //	const auto callInvoker = dynamic_cast<TurboUtilsSpecJSI *>(&turboModule)->jsInvoker_;
 
-		globaRuntime = &rt;
-		
-		auto callback = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
-		
-		String string = String::createFromUtf8(rt, "helloworld");
-		
-        std::thread th{[callback = move(callback), string = move(string)]() {
+        globaRuntime = &rt;
+
+        auto callback = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
+
+        String string = String::createFromUtf8(rt, "helloworld");
+
+        std::thread th{[callback = move(callback), string = move(string), &rt]() {
             LOG("BEFORE SLEEP");
             std::this_thread::sleep_for(std::chrono::milliseconds(5000));
             LOG("AFTER SLEEP");
@@ -70,30 +67,16 @@ namespace example {
             //                    const auto callInvoker = dynamic_cast<TurboUtilsSpecJSI *>(&turboModule)->jsInvoker_;
             LOG("3");
             //
-			
-			
-			
-			
-			
-//			String string = String::createFromUtf8(*sharedRt.get(), "helloworld");
-			
-//			bool bad = is_pointer_valid(globaRuntime);
-			
-			
-			
-//			if(global.get){
+            globalCallInvoker->invokeAsync([callback = move(callback), &string]() {
 //
-//			}
 //
-//            globalCallInvoker->invokeAsync([callback = move(callback), &string]() {
-//				
-//				
-				callback->call(*globaRuntime, Value::null());
-//                LOG("5");
-//            });
-            LOG("4");
+//                callback->call(*globaRuntime, Value::null());
+                LOG("5");
+            });
             //            }
-        }};
+        }
+
+		};
 
         th.detach();
 
