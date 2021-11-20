@@ -63,7 +63,7 @@ namespace example {
 
         std::thread th{[]() {
             LOG("BEFORE SLEEP");
-            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
             LOG("AFTER SLEEP");
             LOG("1");
 

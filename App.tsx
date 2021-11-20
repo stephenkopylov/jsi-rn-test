@@ -10,7 +10,7 @@
 
 const LARGE_STRING = "123123";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -70,6 +70,10 @@ const App: React.FC = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
   };
 
+  const fullResult = useCallback((newResult)=>{
+    return result + ' ' + newResult;
+  },[result])
+
   useEffect(() => {
     // setTimeout(() => {
     //   setColorState(!colorState);
@@ -85,8 +89,9 @@ const App: React.FC = () => {
       <TouchableOpacity
         onPress={() => {
           // @ts-ignore
-          global.exampleModule.helloWorld((result) => {
-            console.log("result = ", result);
+          global.exampleModule.helloWorld((c_result) => {
+            console.log("result = ", c_result);
+            setResult(fullResult(c_result));
           });
         }}>
         <View style={{ width: 100, height: 100, backgroundColor: "green" }} />
