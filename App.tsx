@@ -88,10 +88,11 @@ const App: React.FC = () => {
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <TouchableOpacity
         onPress={() => {
+          const prev = global.nativePerformanceNow();
           // @ts-ignore
           global.exampleModule.helloWorld((c_result) => {
             console.log("result = ", c_result);
-            setResult(fullResult(c_result));
+            setResult(fullResult(`${global.nativePerformanceNow()-prev}`));
           });
         }}>
         <View style={{ width: 100, height: 100, backgroundColor: "green" }} />
