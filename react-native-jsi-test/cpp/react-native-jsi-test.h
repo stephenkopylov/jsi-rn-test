@@ -8,6 +8,7 @@
 #else
 #include <ReactCommon/TurboModule.h>
 #endif
+#include "Logging.h"
 
 using namespace facebook::react;
 using namespace facebook::jsi;
