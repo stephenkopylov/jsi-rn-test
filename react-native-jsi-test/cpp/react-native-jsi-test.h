@@ -24,8 +24,7 @@ protected:
 
 public:
 	// define our interface methods
-	virtual String nativeGreeting(Runtime &rt, const String &name) = 0;
-	virtual Value nativeSumSquares(Runtime &rt, double a, double b) = 0;
+//	virtual String nativeGreeting(Runtime &rt, const String &name) = 0;
 };
 
 // This is the actual implementation of the module methods
@@ -33,8 +32,7 @@ public:
   public:
 	  UtilsTurboModule(std::shared_ptr<CallInvoker> jsInvoker): TurboUtilsSpecJSI(jsInvoker){}
 
-	  String nativeGreeting(Runtime &rt, const String &name) override;
-	  Value nativeSumSquares(Runtime &rt, double a, double b) override;
+//	  String nativeGreeting(Runtime &rt, const String &name) override;
   };
 
 }
