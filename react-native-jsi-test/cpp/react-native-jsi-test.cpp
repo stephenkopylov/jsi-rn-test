@@ -2,12 +2,21 @@
 #include <thread>
 
 static std::shared_ptr <CallInvoker> globalCallInvoker;
+
 static Runtime *globaRuntime;
+
+static std::shared_ptr <Function> globalOnMessageCallback;
+
+static int installId = 0;
 
 namespace example {
     void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 
+        installId++;
+
         globalCallInvoker = callInvoker;
+        globaRuntime = &jsiRuntime;
+        globalOnMessageCallback = NULL;
 
         std::shared_ptr <UtilsTurboModule> nativeModule =
                 std::make_shared<UtilsTurboModule>(callInvoker);
@@ -47,36 +56,25 @@ namespace example {
 
     static Value _helloWorld(Runtime &rt, TurboModule &turboModule,
                              const Value *args, size_t arg_count) {
-
-        //	Function callback = args[0].getObject(rt).getFunction(rt);
-        //	const auto callInvoker = dynamic_cast<TurboUtilsSpecJSI *>(&turboModule)->jsInvoker_;
-
-        globaRuntime = &rt;
-
-        auto callback = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
-
+        auto currentInstallId = installId;
         String string = String::createFromUtf8(rt, "helloworld");
 
-        std::thread th{[callback = move(callback), string = move(string), &rt]() {
+        globalOnMessageCallback = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
+
+        std::thread th{[]() {
             LOG("BEFORE SLEEP");
             std::this_thread::sleep_for(std::chrono::milliseconds(5000));
             LOG("AFTER SLEEP");
-            //            if (turboModule.jsInvoker_ != nullptr) {
             LOG("1");
-            LOG("2");
-            //                    const auto callInvoker = dynamic_cast<TurboUtilsSpecJSI *>(&turboModule)->jsInvoker_;
-            LOG("3");
-            //
-            globalCallInvoker->invokeAsync([callback = move(callback), &string]() {
-//
-//
-//                callback->call(*globaRuntime, Value::null());
-                LOG("5");
-            });
-            //            }
-        }
 
-		};
+            if (globalOnMessageCallback) {
+                globalCallInvoker->invokeAsync([]() {
+                    String string = String::createFromUtf8(*globaRuntime, "helloworld");
+                    globalOnMessageCallback->call(*globaRuntime, string);
+                });
+            }
+        }
+        };
 
         th.detach();
 
@@ -86,7 +84,7 @@ namespace example {
     TurboUtilsSpecJSI::TurboUtilsSpecJSI(std::shared_ptr <CallInvoker> jsInvoker) : TurboModule(
             "exampleModule", jsInvoker) {
         //here we assign our TurboModule object properties
-        methodMap_["helloWorld"] = MethodMetadata{0, move(_helloWorld)};
+        methodMap_["helloWorld"] = MethodMetadata{0, _helloWorld};
     }
 
 //String UtilsTurboModule::nativeGreeting(Runtime &rt, const String &name) {
