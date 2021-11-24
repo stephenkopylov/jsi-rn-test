@@ -90,7 +90,7 @@ const App: React.FC = () => {
         onPress={() => {
           const prev = global.nativePerformanceNow();
           // @ts-ignore
-          global.exampleModule.helloWorld((c_result) => {
+          global.exampleModule.send((c_result) => {
             console.log("result = ", c_result);
             setResult(fullResult(`${global.nativePerformanceNow()-prev}`));
           });
