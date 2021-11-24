@@ -70,9 +70,9 @@ const App: React.FC = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
   };
 
-  const fullResult = useCallback((newResult)=>{
-    return result + ' ' + newResult;
-  },[result])
+  const fullResult = useCallback((newResult) => {
+    return result + " " + newResult;
+  }, [result]);
 
   useEffect(() => {
     // setTimeout(() => {
@@ -86,17 +86,30 @@ const App: React.FC = () => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <TouchableOpacity
-        onPress={() => {
-          const prev = global.nativePerformanceNow();
-          // @ts-ignore
-          global.exampleModule.send((c_result) => {
-            console.log("result = ", c_result);
-            setResult(fullResult(`${global.nativePerformanceNow()-prev}`));
-          });
-        }}>
-        <View style={{ width: 100, height: 100, backgroundColor: "green" }} />
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          onPress={() => {
+            const prev = global.nativePerformanceNow();
+            // @ts-ignore
+            global.exampleModule.send((c_result) => {
+              console.log("result = ", c_result);
+              setResult(fullResult(`${global.nativePerformanceNow() - prev}`));
+            });
+          }}>
+          <View style={{ width: 100, height: 100, backgroundColor: "green" }}>
+            <Text>{"send"}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            // @ts-ignore
+            global.exampleModule.testJson({ test: 123 });
+          }}>
+          <View style={{ width: 100, height: 100, backgroundColor: "green" }}>
+            <Text>{"test json"}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
       <Text
         style={{
           height: 100,

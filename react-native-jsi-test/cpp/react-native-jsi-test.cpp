@@ -1,6 +1,7 @@
 #include "react-native-jsi-test.h"
 #include <thread>
 #include <map>
+#include "JSIObjectToRapidJsonConverter.h"
 
 static std::shared_ptr <CallInvoker> globalCallInvoker;
 
@@ -25,33 +26,6 @@ void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 	jsiRuntime.global().setProperty(jsiRuntime,
 									PropNameID::forAscii(jsiRuntime, "exampleModule"),
 									Object::createFromHostObject(jsiRuntime, nativeModule));
-	
-	//	auto helloWorld = Function::createFromHostFunction(jsiRuntime, PropNameID::forAscii(jsiRuntime, "helloWorld"), 0,[&callInvoker](Runtime & runtime,
-	//																																	const Value & thisValue, const Value * arguments, size_t count) -> Value {
-	//
-	//		auto callback = std::make_shared<Value>((arguments[0].asObject(runtime)));
-	//
-	//		std::thread th { [callback, &runtime, &callInvoker](){
-	//			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	//
-	//			CallInvoker *invoker = callInvoker.get();
-	//
-	//			invoker->invokeAsync([](){
-	//
-	//			});
-	//
-	//			//			*callInvoker->invokeAsync([callback, &runtime]() {
-	//			//				string helloworld = "helloworld";
-	//			//				callback->asObject(runtime).asFunction(runtime).call(runtime, String::createFromUtf8(runtime, helloworld));
-	//			//			});
-	//		}};
-	//
-	//		th.detach();
-	//
-	//		return Value::null();
-	//	});
-	
-	//	jsiRuntime.global().setProperty(jsiRuntime, "helloWorld", move(helloWorld));
 }
 
 
@@ -69,7 +43,7 @@ static Value helloWorld(Runtime &rt, TurboModule &turboModule,
 		
 		if (globalOnMessageCallback) {
 			globalCallInvoker->invokeAsync([]() {
-				String string = String::createFromUtf8(*globaRuntime, "helloworld");
+				String string = String::createFromUtf8(*globaRuntime, "helloworld result");
 				globalOnMessageCallback->call(*globaRuntime, string);
 			});
 		}
@@ -96,9 +70,12 @@ static Value send(Runtime &rt, TurboModule &turboModule,
 		LOG("1");
 		
 		globalCallInvoker->invokeAsync([currentCallbackId]() {
+			const char *message = "{\"test\":123}";
+			
+			Value object = Value::createFromJsonUtf8(*globaRuntime, (const unsigned char *)message, strlen(message));
+			
 			if(globalCallbacksStore[currentCallbackId]){
-				String string = String::createFromUtf8(*globaRuntime, "send result");
-				globalCallbacksStore[currentCallbackId]->call(*globaRuntime, string);
+				globalCallbacksStore[currentCallbackId]->call(*globaRuntime, object);
 			}
 		});
 	}
@@ -109,10 +86,23 @@ static Value send(Runtime &rt, TurboModule &turboModule,
 	return Value::null();
 };
 
+static Value testJson(Runtime &rt, TurboModule &turboModule,
+				  const Value *args, size_t arg_count) {
+	callbackId++;
+	
+	Object object = args[0].getObject(rt);
+	
+	std::string document = JSIObjectToRapidJsonConverter::convert(rt, object);
+	
+	return Value::null();
+};
+
+
 TurboUtilsSpecJSI::TurboUtilsSpecJSI(std::shared_ptr <CallInvoker> jsInvoker) : TurboModule(
 																							"exampleModule", jsInvoker) {
 																								//here we assign our TurboModule object properties
 																								methodMap_["helloWorld"] = MethodMetadata{0, helloWorld};
 																								methodMap_["send"] = MethodMetadata{0, send};
+																								methodMap_["testJson"] = MethodMetadata{0, testJson};
 																							}
 }
