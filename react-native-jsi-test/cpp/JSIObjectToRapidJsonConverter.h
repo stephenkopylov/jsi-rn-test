@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <jsi/jsi.h>
 #include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 class JSIObjectToRapidJsonConverter {
 public:
@@ -58,6 +60,27 @@ private:
 		
 		rapidjson::Document document;
 		auto& allocator = document.GetAllocator();
+		
+		document.SetObject();
+		
+		char const *keyString = "keyStr";
+		char const *valueString = "valueStr";
+		
+		rapidjson::Value key;
+		key.SetString(keyString, strlen(keyString));
+		
+		rapidjson::Value v;
+		v.SetBool(false);
+//		v.SetString(valueString, strlen(valueString));
+		
+		document.AddMember(key, v, allocator);
+		
+		rapidjson::StringBuffer buffer;
+		buffer.Clear();
+		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		document.Accept(writer);
+		
+		std::string str =  buffer.GetString();
 		
 		for (size_t i = 0; i < size; i++) {
 			facebook::jsi::String name = propertyNames.getValueAtIndex(rt, i).getString(rt);
