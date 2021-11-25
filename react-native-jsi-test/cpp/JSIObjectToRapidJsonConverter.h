@@ -33,9 +33,9 @@ public:
 	}
 private:
 	static rapidjson::Value JSIObjectToDocument(
-												   facebook::jsi::Runtime &rt,
-												   facebook::jsi::Object &value,
-												   rapidjson::MemoryPoolAllocator<> &allocator){
+												facebook::jsi::Runtime &rt,
+												facebook::jsi::Object &value,
+												rapidjson::MemoryPoolAllocator<> &allocator){
 		facebook::jsi::Array propertyNames = value.getPropertyNames(rt);
 		
 		size_t size = propertyNames.size(rt);
@@ -46,7 +46,8 @@ private:
 		for (size_t i = 0; i < size; i++) {
 			facebook::jsi::String key = propertyNames.getValueAtIndex(rt, i).getString(rt);
 			
-			char const *keyString = key.utf8(rt).c_str();
+			std::string string = key.utf8(rt);
+			char const *keyString = string.c_str();
 			
 			rapidjson::Value keyValue;
 			keyValue.SetString(keyString, (int)strlen(keyString), allocator);
@@ -60,6 +61,25 @@ private:
 		
 		return jsonValue;
 	}
+	
+	static rapidjson::Value convertJSIArrayToRapidJson(
+													   facebook::jsi::Runtime &rt,
+													   const facebook::jsi::Array &value,
+													   rapidjson::MemoryPoolAllocator<> &allocator)
+	{
+		size_t size = value.size(rt);
+		rapidjson::Value v;
+		v.SetArray();
+		
+		for (size_t i = 0; i < size; i++) {
+			rapidjson::Value valueValue =  convertJSIValueToRapidJsonObject(rt, value.getValueAtIndex(rt, i), allocator);
+			if (!valueValue.IsNull()) {
+				v.PushBack(valueValue, allocator);
+			}
+		}
+		return v;
+	}
+	
 	
 	static rapidjson::Value convertJSIValueToRapidJsonObject(
 															 facebook::jsi::Runtime &rt,
@@ -79,23 +99,23 @@ private:
 			v.SetDouble(value.getNumber());
 		}
 		if (value.isString()) {
-			char const *stringValue = value.getString(rt).utf8(rt).c_str();
+			std::string string = value.getString(rt).utf8(rt);
+			char const *stringValue = string.c_str();
 			v.SetString(stringValue, (int)strlen(stringValue), allocator);
 		}
 		if (value.isObject()) {
 			facebook::jsi::Object o = value.getObject(rt);
-//			if (o.isArray(runtime)) {
-//				return convertJSIArrayToNSArray(runtime, o.getArray(runtime));
-//			}
-			v = JSIObjectToDocument(rt, o, allocator);
+			if (o.isArray(rt)) {
+				v = convertJSIArrayToRapidJson(rt, o.getArray(rt), allocator);
+			}else{
+				v = JSIObjectToDocument(rt, o, allocator);
+			}
 		}
 		
 		return v;
 		
 		throw std::runtime_error("Unsupported jsi::jsi::Value kind");
 	}
-	
-
 };
 
 #endif /* RNExpertOptionMobileSocketParser_hpp */
