@@ -17,7 +17,17 @@
 
 class JSIObjectToRapidJsonConverter {
 public:
-	static std::string convert(facebook::jsi::Runtime &rt, facebook::jsi::Object &value){
+	static rapidjson::Document convert(facebook::jsi::Runtime &rt, facebook::jsi::Object &value){
+		rapidjson::Document document;
+		rapidjson::Value jsonValue = JSIObjectToDocument(rt, value, document.GetAllocator());
+		
+		rapidjson::Document finalDocument;
+		finalDocument.CopyFrom(jsonValue, document.GetAllocator());
+		
+		return finalDocument;
+	}
+	
+	static std::string convertToString(facebook::jsi::Runtime &rt, facebook::jsi::Object &value){
 		rapidjson::Document document;
 		rapidjson::Value jsonValue = JSIObjectToDocument(rt, value, document.GetAllocator());
 		
@@ -92,29 +102,29 @@ private:
 		if (value.isUndefined() || value.isNull()) {
 			v.SetNull();
 		}
-		if (value.isBool()) {
+		else if (value.isBool()) {
 			v.SetBool(value.getBool());
 		}
-		if (value.isNumber()) {
+		else if (value.isNumber()) {
 			v.SetDouble(value.getNumber());
 		}
-		if (value.isString()) {
+		else if (value.isString()) {
 			std::string string = value.getString(rt).utf8(rt);
 			char const *stringValue = string.c_str();
 			v.SetString(stringValue, (int)strlen(stringValue), allocator);
 		}
-		if (value.isObject()) {
+		else if (value.isObject()) {
 			facebook::jsi::Object o = value.getObject(rt);
 			if (o.isArray(rt)) {
 				v = convertJSIArrayToRapidJson(rt, o.getArray(rt), allocator);
 			}else{
 				v = JSIObjectToDocument(rt, o, allocator);
 			}
+		}else{
+			throw std::runtime_error("Unsupported jsi::jsi::Value kind");
 		}
 		
 		return v;
-		
-		throw std::runtime_error("Unsupported jsi::jsi::Value kind");
 	}
 };
 

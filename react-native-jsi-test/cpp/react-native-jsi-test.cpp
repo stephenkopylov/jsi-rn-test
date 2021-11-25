@@ -92,7 +92,7 @@ static Value testJson(Runtime &rt, TurboModule &turboModule,
 	
 	Object object = args[0].getObject(rt);
 	
-	std::string document = JSIObjectToRapidJsonConverter::convert(rt, object);
+	std::string document = JSIObjectToRapidJsonConverter::convertToString(rt, object);
 	
 	return String::createFromUtf8(rt, document);
 };
