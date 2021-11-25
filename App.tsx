@@ -103,7 +103,8 @@ const App: React.FC = () => {
         <TouchableOpacity
           onPress={() => {
             // @ts-ignore
-            global.exampleModule.testJson({ test: 123 });
+            const result = global.exampleModule.testJson({ test: "123", test2: 123, test3:{testNested:"123"} });
+            console.log('result = ', result);
           }}>
           <View style={{ width: 100, height: 100, backgroundColor: "green" }}>
             <Text>{"test json"}</Text>

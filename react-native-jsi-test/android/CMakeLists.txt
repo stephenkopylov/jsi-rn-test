@@ -9,6 +9,7 @@ set(PACKAGE_NAME "cpp")  # the name for our library
 
 include_directories(
         ../cpp
+        ../thirdParty
         ../../react-native/React
         ../../react-native/React/Base
         ../../react-native/ReactCommon

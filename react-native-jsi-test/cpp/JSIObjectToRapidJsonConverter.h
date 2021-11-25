@@ -13,86 +13,89 @@
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
+#include <rapidjson/allocators.h>
 
 class JSIObjectToRapidJsonConverter {
 public:
 	static std::string convert(facebook::jsi::Runtime &rt, facebook::jsi::Object &value){
-		facebook::jsi::Array propertyNames = value.getPropertyNames(rt);
-		
-		size_t size = propertyNames.size(rt);
-		
-		rapidjson::Document document = JSIObjectToDocument(rt, value);
-		
-		return nullptr;
-	}
-private:
-	static int* convertJSIValueToRapidJsonObject(
-												 facebook::jsi::Runtime &runtime,
-												 const facebook::jsi::Value &value)
-	{
-		//	if (value.isUndefined() || value.isNull()) {
-		//		return nil;
-		//	}
-		//	if (value.isBool()) {
-		//		return @(value.getBool());
-		//	}
-		//	if (value.isNumber()) {
-		//		return @(value.getNumber());
-		//	}
-		//	if (value.isString()) {
-		//		return convertJSIStringToNSString(runtime, value.getString(runtime));
-		//	}
-		//	if (value.isObject()) {
-		//		facebook::jsi::Object o = value.getObject(runtime);
-		//		if (o.isArray(runtime)) {
-		//			return convertJSIArrayToNSArray(runtime, o.getArray(runtime));
-		//		}
-		//		return JSIObjectToDocument(runtime, o);
-		//	}
-		
-		throw std::runtime_error("Unsupported jsi::jsi::Value kind");
-	}
-	
-	static rapidjson::Document JSIObjectToDocument(facebook::jsi::Runtime &rt, facebook::jsi::Object &value){
-		facebook::jsi::Array propertyNames = value.getPropertyNames(rt);
-		
-		size_t size = propertyNames.size(rt);
-		
 		rapidjson::Document document;
-		auto& allocator = document.GetAllocator();
+		rapidjson::Value jsonValue = JSIObjectToDocument(rt, value, document.GetAllocator());
 		
-		document.SetObject();
-		
-		char const *keyString = "keyStr";
-		char const *valueString = "valueStr";
-		
-		rapidjson::Value key;
-		key.SetString(keyString, strlen(keyString));
-		
-		rapidjson::Value v;
-		v.SetBool(false);
-//		v.SetString(valueString, strlen(valueString));
-		
-		document.AddMember(key, v, allocator);
+		rapidjson::Document d;
+		d.CopyFrom(jsonValue, document.GetAllocator());
 		
 		rapidjson::StringBuffer buffer;
 		buffer.Clear();
 		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-		document.Accept(writer);
+		d.Accept(writer);
 		
-		std::string str =  buffer.GetString();
+		return buffer.GetString();
+	}
+private:
+	static rapidjson::Value JSIObjectToDocument(
+												   facebook::jsi::Runtime &rt,
+												   facebook::jsi::Object &value,
+												   rapidjson::MemoryPoolAllocator<> &allocator){
+		facebook::jsi::Array propertyNames = value.getPropertyNames(rt);
+		
+		size_t size = propertyNames.size(rt);
+		
+		rapidjson::Value jsonValue;
+		jsonValue.SetObject();
 		
 		for (size_t i = 0; i < size; i++) {
-			facebook::jsi::String name = propertyNames.getValueAtIndex(rt, i).getString(rt);
+			facebook::jsi::String key = propertyNames.getValueAtIndex(rt, i).getString(rt);
 			
-			int* v = convertJSIValueToRapidJsonObject(rt, value.getProperty(rt, name));
+			char const *keyString = key.utf8(rt).c_str();
 			
-			if (v) {
+			rapidjson::Value keyValue;
+			keyValue.SetString(keyString, (int)strlen(keyString), allocator);
+			
+			rapidjson::Value valueValue = convertJSIValueToRapidJsonObject(rt, value.getProperty(rt, key), allocator);
+			
+			if (!valueValue.IsNull()) {
+				jsonValue.AddMember(keyValue, valueValue, allocator);
 			}
 		}
 		
-		return document;
+		return jsonValue;
 	}
+	
+	static rapidjson::Value convertJSIValueToRapidJsonObject(
+															 facebook::jsi::Runtime &rt,
+															 const facebook::jsi::Value &value,
+															 rapidjson::MemoryPoolAllocator<> &allocator
+															 )
+	{
+		rapidjson::Value v;
+		
+		if (value.isUndefined() || value.isNull()) {
+			v.SetNull();
+		}
+		if (value.isBool()) {
+			v.SetBool(value.getBool());
+		}
+		if (value.isNumber()) {
+			v.SetDouble(value.getNumber());
+		}
+		if (value.isString()) {
+			char const *stringValue = value.getString(rt).utf8(rt).c_str();
+			v.SetString(stringValue, (int)strlen(stringValue), allocator);
+		}
+		if (value.isObject()) {
+			facebook::jsi::Object o = value.getObject(rt);
+//			if (o.isArray(runtime)) {
+//				return convertJSIArrayToNSArray(runtime, o.getArray(runtime));
+//			}
+			v = JSIObjectToDocument(rt, o, allocator);
+		}
+		
+		return v;
+		
+		throw std::runtime_error("Unsupported jsi::jsi::Value kind");
+	}
+	
+
 };
 
 #endif /* RNExpertOptionMobileSocketParser_hpp */
