@@ -106,9 +106,11 @@ static Value testJsonParseCPP(Runtime &rt, TurboModule &turboModule,
 	
 	Object object = args[0].getObject(rt);
 	
-	std::string document = JSIObjectToRapidJsonConverter::convertToString(rt, object);
+//	rapidjson::Document document = JSIObjectToRapidJsonConverter::convert(rt, object);
 	
-	const char *str = document.c_str();
+//	std::string document = JSIObjectToRapidJsonConverter::convertToString(rt, object);
+	
+	const char *str = "123";
 	
 	return Value::createFromJsonUtf8(rt, (const unsigned char *)str, strlen(str));
 };
