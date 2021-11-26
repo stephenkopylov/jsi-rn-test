@@ -18,6 +18,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   useColorScheme,
   View,
 } from 'react-native';
@@ -60,6 +61,15 @@ const Section: React.FC<{
   );
 };
 
+const sampleJson = {
+  test: '123',
+  test2: 123,
+  test3: {
+    testNested: '123',
+    nestedArray: ['123', 123, {test: '111'}],
+  },
+};
+
 const App: React.FC = () => {
   const [result, setResult] = useState<string>('');
 
@@ -73,7 +83,7 @@ const App: React.FC = () => {
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View>
-        <TouchableOpacity
+        <TouchableWithoutFeedback
           onPress={() => {
             // @ts-ignore
             const prev = global.nativePerformanceNow();
@@ -83,41 +93,67 @@ const App: React.FC = () => {
               setResult(`${global.nativePerformanceNow() - prev}`);
             });
           }}>
-          <View
-            style={{
-              margin: 5,
-              height: 100,
-              backgroundColor: 'green',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+          <View style={styles.innerButtonContainer}>
             <Text>{'send'}</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
           onPress={() => {
             // @ts-ignore
-            const result = global.exampleModule.testJson({
-              test: '123',
-              test2: 123,
-              test3: {
-                testNested: '123',
-                nestedArray: ['123', 123, {test: '111'}],
-              },
-            });
-            console.log('result = ', result);
+            const prev = global.nativePerformanceNow();
+
+            for (let i = 0; i < 10000; i++) {
+              // @ts-ignore
+              global.exampleModule.testJsonParseCPP({
+                testtest: i,
+                ...sampleJson,
+              });
+            }
+            // @ts-ignore
+            setResult(`${global.nativePerformanceNow() - prev}`);
           }}>
-          <View
-            style={{
-              margin: 5,
-              height: 100,
-              backgroundColor: 'green',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text>{'test json'}</Text>
+          <View style={styles.innerButtonContainer}>
+            <Text>{'test json parse cpp'}</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            // @ts-ignore
+            const prev = global.nativePerformanceNow();
+
+            for (let i = 0; i < 10000; i++) {
+              // @ts-ignore
+              global.exampleModule.testJsonNativeParse({
+                testtest: i,
+                ...sampleJson,
+              });
+            }
+            // @ts-ignore
+            setResult(`${global.nativePerformanceNow() - prev}`);
+          }}>
+          <View style={styles.innerButtonContainer}>
+            <Text>{'test json parse using createFromJsonUtf8'}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            // @ts-ignore
+            const prev = global.nativePerformanceNow();
+            for (let i = 0; i < 10000; i++) {
+              JSON.parse(
+                // @ts-ignore
+                global.exampleModule.testJsonJSParse(
+                  JSON.stringify({testtest: i, ...sampleJson}),
+                ),
+              );
+            }
+            // @ts-ignore
+            setResult(`${global.nativePerformanceNow() - prev}`);
+          }}>
+          <View style={styles.innerButtonContainer}>
+            <Text>{'test json parse using json parse'}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       <Text
         style={{
@@ -130,6 +166,13 @@ const App: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  innerButtonContainer: {
+    margin: 5,
+    height: 100,
+    backgroundColor: 'green',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,

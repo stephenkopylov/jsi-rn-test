@@ -13,6 +13,10 @@ static std::map <int, std::shared_ptr <Function>> globalCallbacksStore;
 
 static int callbackId = 0;
 
+static std::shared_ptr <Function> globalParse;
+
+static std::shared_ptr <Function> globalStringify;
+
 namespace example {
 void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 	globalCallInvoker = callInvoker;
@@ -23,6 +27,16 @@ void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 	std::shared_ptr <UtilsTurboModule> nativeModule =
 	std::make_shared<UtilsTurboModule>(callInvoker);
 	
+	//	Function stringifyObject =
+	
+	globalParse = std::make_shared<Function>(jsiRuntime.global()
+												 .getPropertyAsObject(jsiRuntime, "JSON")
+												 .getPropertyAsFunction(jsiRuntime, "parse"));
+	
+	globalStringify = std::make_shared<Function>(jsiRuntime.global()
+												 .getPropertyAsObject(jsiRuntime, "JSON")
+												 .getPropertyAsFunction(jsiRuntime, "stringify"));
+	
 	jsiRuntime.global().setProperty(jsiRuntime,
 									PropNameID::forAscii(jsiRuntime, "exampleModule"),
 									Object::createFromHostObject(jsiRuntime, nativeModule));
@@ -30,7 +44,7 @@ void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 
 
 static Value helloWorld(Runtime &rt, TurboModule &turboModule,
-						const Value *args, size_t arg_count) {
+						const Value *args, size_t arg_count) {//one callback test
 	String string = String::createFromUtf8(rt, "helloworld");
 	
 	globalOnMessageCallback = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
@@ -56,7 +70,7 @@ static Value helloWorld(Runtime &rt, TurboModule &turboModule,
 };
 
 static Value send(Runtime &rt, TurboModule &turboModule,
-				  const Value *args, size_t arg_count) {
+				  const Value *args, size_t arg_count) {//multiple callbacks test
 	callbackId++;
 	
 	globalCallbacksStore[callbackId] = std::make_shared<Function>(args[0].getObject(rt).getFunction(rt));
@@ -86,16 +100,45 @@ static Value send(Runtime &rt, TurboModule &turboModule,
 	return Value::null();
 };
 
-static Value testJson(Runtime &rt, TurboModule &turboModule,
-				  const Value *args, size_t arg_count) {
+static Value testJsonParseCPP(Runtime &rt, TurboModule &turboModule,
+							  const Value *args, size_t arg_count) {
 	callbackId++;
 	
 	Object object = args[0].getObject(rt);
 	
 	std::string document = JSIObjectToRapidJsonConverter::convertToString(rt, object);
 	
+	const char *str = "{}";
+	
 	return String::createFromUtf8(rt, document);
 };
+
+static Value testJsonNativeParse(Runtime &rt, TurboModule &turboModule,
+								 const Value *args, size_t arg_count) {
+	callbackId++;
+	
+//	Object object = args[0].getObject(rt);
+	
+	std::string jsString = globalStringify->call(rt, args[0]).getString(rt).utf8(rt);
+
+	const char *str = jsString.c_str();
+	
+	return globalParse->call(rt, String::createFromUtf8(rt, (const unsigned char *)str, strlen(str)));
+};
+
+static Value testJsonJSParse(Runtime &rt, TurboModule &turboModule,
+							 const Value *args, size_t arg_count) {
+	callbackId++;
+	
+	std::string stdstr = args[0].getString(rt).utf8(rt);
+	
+	const char *str = stdstr.c_str();
+	
+	return String::createFromUtf8(rt, (const unsigned char *)str, strlen(str));
+};
+
+
+
 
 
 TurboUtilsSpecJSI::TurboUtilsSpecJSI(std::shared_ptr <CallInvoker> jsInvoker) : TurboModule(
@@ -103,6 +146,8 @@ TurboUtilsSpecJSI::TurboUtilsSpecJSI(std::shared_ptr <CallInvoker> jsInvoker) : 
 																								//here we assign our TurboModule object properties
 																								methodMap_["helloWorld"] = MethodMetadata{0, helloWorld};
 																								methodMap_["send"] = MethodMetadata{0, send};
-																								methodMap_["testJson"] = MethodMetadata{0, testJson};
+																								methodMap_["testJsonParseCPP"] = MethodMetadata{0, testJsonParseCPP};
+																								methodMap_["testJsonNativeParse"] = MethodMetadata{0, testJsonNativeParse};
+																								methodMap_["testJsonJSParse"] = MethodMetadata{0, testJsonJSParse};
 																							}
 }
