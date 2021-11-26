@@ -102,15 +102,22 @@ const App: React.FC = () => {
             // @ts-ignore
             const prev = global.nativePerformanceNow();
 
+            let result = null;
+
             for (let i = 0; i < 10000; i++) {
               // @ts-ignore
-              global.exampleModule.testJsonParseCPP({
+              result = global.exampleModule.testJsonParseCPP({
                 testtest: i,
                 ...sampleJson,
               });
             }
-            // @ts-ignore
-            setResult(`${global.nativePerformanceNow() - prev}`);
+
+            setResult(
+              // @ts-ignore
+              `${global.nativePerformanceNow() - prev} ${JSON.stringify(
+                result,
+              )}`,
+            );
           }}>
           <View style={styles.innerButtonContainer}>
             <Text>{'test json parse cpp'}</Text>
@@ -121,15 +128,22 @@ const App: React.FC = () => {
             // @ts-ignore
             const prev = global.nativePerformanceNow();
 
+            let result = null;
+
             for (let i = 0; i < 10000; i++) {
               // @ts-ignore
-              global.exampleModule.testJsonNativeParse({
+              result = global.exampleModule.testJsonNativeParse({
                 testtest: i,
                 ...sampleJson,
               });
             }
-            // @ts-ignore
-            setResult(`${global.nativePerformanceNow() - prev}`);
+
+            setResult(
+              // @ts-ignore
+              `${global.nativePerformanceNow() - prev} ${JSON.stringify(
+                result,
+              )}`,
+            );
           }}>
           <View style={styles.innerButtonContainer}>
             <Text>{'test json parse using createFromJsonUtf8'}</Text>
@@ -139,16 +153,24 @@ const App: React.FC = () => {
           onPress={() => {
             // @ts-ignore
             const prev = global.nativePerformanceNow();
+
+            let result = null;
+
             for (let i = 0; i < 10000; i++) {
-              JSON.parse(
+              result = JSON.parse(
                 // @ts-ignore
                 global.exampleModule.testJsonJSParse(
                   JSON.stringify({testtest: i, ...sampleJson}),
                 ),
               );
             }
-            // @ts-ignore
-            setResult(`${global.nativePerformanceNow() - prev}`);
+
+            setResult(
+              // @ts-ignore
+              `${global.nativePerformanceNow() - prev} ${JSON.stringify(
+                result,
+              )}`,
+            );
           }}>
           <View style={styles.innerButtonContainer}>
             <Text>{'test json parse using json parse'}</Text>

@@ -108,9 +108,9 @@ static Value testJsonParseCPP(Runtime &rt, TurboModule &turboModule,
 	
 	std::string document = JSIObjectToRapidJsonConverter::convertToString(rt, object);
 	
-	const char *str = "{}";
+	const char *str = document.c_str();
 	
-	return String::createFromUtf8(rt, document);
+	return Value::createFromJsonUtf8(rt, (const unsigned char *)str, strlen(str));
 };
 
 static Value testJsonNativeParse(Runtime &rt, TurboModule &turboModule,
@@ -119,7 +119,7 @@ static Value testJsonNativeParse(Runtime &rt, TurboModule &turboModule,
 	
 //	Object object = args[0].getObject(rt);
 	
-	std::string jsString = globalStringify->call(rt, args[0]).getString(rt).utf8(rt);
+	std::string jsString = globalStringify->call(rt, args[0]).asString(rt).utf8(rt);
 
 	const char *str = jsString.c_str();
 	
