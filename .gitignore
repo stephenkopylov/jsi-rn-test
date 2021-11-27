@@ -30,6 +30,7 @@ local.properties
 *.iml
 *.hprof
 react-native-jsi-test/android/.cxx
+react-native-jsi-test-view/android/.cxx
 
 # node.js
 #
