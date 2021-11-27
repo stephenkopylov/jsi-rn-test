@@ -1,6 +1,6 @@
 {
-  "name": "react-native-jsi-test-example",
-  "description": "Example app for react-native-jsi-test",
+  "name": "react-native-jsi-test-view-example",
+  "description": "Example app for react-native-jsi-test-view",
   "version": "0.0.1",
   "private": true,
   "scripts": {

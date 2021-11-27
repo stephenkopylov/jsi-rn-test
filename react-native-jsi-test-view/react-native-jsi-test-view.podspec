@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-  s.source       = { :git => "https://github.com/stephenkopylov/react-native-jsi-test.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/stephenkopylov/react-native-jsi-test-view.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}", "cpp/**/*.{h,hpp,c,cpp}", "thirdParty/rapidjson/*.{hpp,cpp,h,c}", "thirdParty/rapidjson/error/*.{hpp,cpp,h,c}", "thirdParty/rapidjson/internal/*.{hpp,cpp,h,c}"
 

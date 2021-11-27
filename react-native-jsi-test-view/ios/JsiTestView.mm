@@ -1,13 +1,13 @@
-#import "JsiTest.h"
+#import "JsiTestView.h"
 #import <React/RCTBridge+Private.h>
 #import <React/RCTUtils.h>
 #import <ReactCommon/CallInvoker.h>
 //#import <React/CallInvoker.h>
-#import "react-native-jsi-test.h"
+#import "react-native-jsi-test-view.h"
 #import "RCTTurboModule.h"
 #import <ReactCommon/RCTTurboModule.h>
 
-@implementation JsiTest
+@implementation JsiTestView
 
 @synthesize bridge = _bridge;
 

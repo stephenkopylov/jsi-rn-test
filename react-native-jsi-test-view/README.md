@@ -1,17 +1,17 @@
-# react-native-jsi-test
+# react-native-jsi-test-view
 
-jsi test
+jsi test view
 
 ## Installation
 
 ```sh
-npm install react-native-jsi-test
+npm install react-native-jsi-test-view
 ```
 
 ## Usage
 
 ```js
-import { multiply } from "react-native-jsi-test";
+import { multiply } from "react-native-jsi-test-view";
 
 // ...
 
