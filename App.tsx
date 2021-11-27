@@ -176,6 +176,15 @@ const App: React.FC = () => {
             <Text>{'test json parse using json parse'}</Text>
           </View>
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            // @ts-ignore
+            console.log(global.exampleViewModule.testJsonJSParse(JSON.stringify(sampleJson)));
+          }}>
+          <View style={styles.innerButtonContainer}>
+            <Text>{'view module test'}</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       <Text
         style={{

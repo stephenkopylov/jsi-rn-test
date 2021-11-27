@@ -17,7 +17,7 @@ static std::shared_ptr <Function> globalParse;
 
 static std::shared_ptr <Function> globalStringify;
 
-namespace example {
+namespace exampleView {
 void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 	globalCallInvoker = callInvoker;
 	globaRuntime = &jsiRuntime;
@@ -38,7 +38,7 @@ void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 												 .getPropertyAsFunction(jsiRuntime, "stringify"));
 	
 	jsiRuntime.global().setProperty(jsiRuntime,
-									PropNameID::forAscii(jsiRuntime, "exampleModule"),
+									PropNameID::forAscii(jsiRuntime, "exampleViewModule"),
 									Object::createFromHostObject(jsiRuntime, nativeModule));
 }
 
@@ -144,7 +144,7 @@ static Value testJsonJSParse(Runtime &rt, TurboModule &turboModule,
 
 
 TurboUtilsSpecJSI::TurboUtilsSpecJSI(std::shared_ptr <CallInvoker> jsInvoker) : TurboModule(
-																							"exampleModule", jsInvoker) {
+																							"exampleViewModule", jsInvoker) {
 																								//here we assign our TurboModule object properties
 																								methodMap_["helloWorld"] = MethodMetadata{0, helloWorld};
 																								methodMap_["send"] = MethodMetadata{0, send};

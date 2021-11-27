@@ -14,7 +14,7 @@ using namespace facebook::react;
 using namespace facebook::jsi;
 using namespace std;
 
-namespace example {
+namespace exampleView {
 int helloWorld(float a);
 void install(Runtime & jsiRuntime, std::shared_ptr<CallInvoker> callInvoker) ;
 
