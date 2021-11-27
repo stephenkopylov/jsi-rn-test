@@ -8,13 +8,13 @@ import com.facebook.react.turbomodule.core.CallInvokerHolderImpl;
 public class NativeProxy {
 
   /*** jsi stuff ***/          //these could be static as well
-  private native void installNativeJsi(long jsContextNativePointer, CallInvokerHolderImpl jsCallInvokerHolder);
+  private native void installNativeJsiView(long jsContextNativePointer, CallInvokerHolderImpl jsCallInvokerHolder);
 
   public void installJsi(ReactContext context) {
     Log.d("reactnativejsitestview", "Installing native...");
     CallInvokerHolderImpl holder = (CallInvokerHolderImpl)context.getCatalystInstance().getJSCallInvokerHolder();
     long contextPointer = context.getJavaScriptContextHolder().get();
-    installNativeJsi(contextPointer, holder);
+    installNativeJsiView(contextPointer, holder);
 
     Log.d("reactnativejsitestview", "success ...");
   }

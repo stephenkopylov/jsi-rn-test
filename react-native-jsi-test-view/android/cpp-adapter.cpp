@@ -20,13 +20,13 @@ struct NativeProxy : jni::JavaClass<NativeProxy> {
 
     static void registerNatives() {
         javaClassStatic()->registerNatives({
-                                                   makeNativeMethod("installNativeJsi",
-                                                                    NativeProxy::installNativeJsi)
+                                                   makeNativeMethod("installNativeJsiView",
+                                                                    NativeProxy::installNativeJsiView)
                                            });
     }
 
 private:
-    static void installNativeJsi(jni::alias_ref<jni::JObject> thiz,
+    static void installNativeJsiView(jni::alias_ref<jni::JObject> thiz,
                                  jlong jsiRuntimePtr,
                                  jni::alias_ref<react::CallInvokerHolder::javaobject> jsCallInvokerHolder) {
 
@@ -35,7 +35,7 @@ private:
 
         LOG("installNativeJsi");
 
-        example::install(*jsiRuntime, jsCallInvoker);
+        exampleView::install(*jsiRuntime, jsCallInvoker);
     }
 };
 

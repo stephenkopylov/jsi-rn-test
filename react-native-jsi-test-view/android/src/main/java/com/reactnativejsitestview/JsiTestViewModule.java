@@ -9,7 +9,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
 @ReactModule(name = JsiTestViewModule.NAME)
-public class JsiTestModule extends ReactContextBaseJavaModule {
+public class JsiTestViewModule extends ReactContextBaseJavaModule {
   public static final String NAME = "JsiTestView";
 
   NativeProxy nativeProxy = new NativeProxy();
@@ -33,7 +33,7 @@ public class JsiTestModule extends ReactContextBaseJavaModule {
   static {
     try {
       // Used to load the 'native-lib' library on application startup.
-      System.loadLibrary("cpp");
+      System.loadLibrary("cpp-view");
     } catch (Exception ignored) {
     }
   }

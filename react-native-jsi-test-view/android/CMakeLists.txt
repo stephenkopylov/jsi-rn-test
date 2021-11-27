@@ -5,7 +5,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 
 set(build_DIR ${CMAKE_SOURCE_DIR}/build)
-set(PACKAGE_NAME "cpp")  # the name for our library
+set(PACKAGE_NAME "cpp-view")  # the name for our library
 
 include_directories(
         ../cpp
@@ -32,7 +32,7 @@ add_library(
         ../../react-native/ReactCommon/jsi/jsi/jsi.cpp
         ../../react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp
         ../../react-native/ReactCommon/react/nativemodule/core/ReactCommon/TurboModule.cpp
-        ../cpp/react-native-jsi-test.cpp
+        ../cpp/react-native-jsi-test-view.cpp
         ./cpp-adapter.cpp
 )
 
