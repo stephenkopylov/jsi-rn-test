@@ -10,17 +10,8 @@
 
 @implementation JsiTestViewWithTag
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
--(void)setTag:(NSInteger)tag{
-	[super setTag:tag];
-	
+-(void)setReactTag:(NSNumber *)reactTag{
+	[super setReactTag:reactTag];
 }
 
 @end
