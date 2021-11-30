@@ -21,10 +21,12 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
       ref,
       () => ({
         foo: () => {
+          console.log('foo');
           // const i = cloneIndicatorFields(indicator);
           // NativeModules.RNExpertOptionMobilePlot.addIndicator(handle, i);
         },
         bar: () => {
+          console.log('bar');
           // NativeModules.RNExpertOptionMobilePlot.removeIndicator(handle, index);
         }
       }),

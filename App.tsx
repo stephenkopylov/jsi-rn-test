@@ -1,4 +1,7 @@
-import {JsiTestViewComponent} from 'react-native-jsi-test-view/src/';
+import {
+  IJsiTestViewComponentRef,
+  JsiTestViewComponent,
+} from 'react-native-jsi-test-view/src/';
 
 /**
  * Sample React Native App
@@ -33,6 +36,7 @@ const sampleJson = {
 
 const App: React.FC = () => {
   const [result, setResult] = useState<string>('');
+  const viewRef = React.useRef<IJsiTestViewComponentRef>(null);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -139,19 +143,23 @@ const App: React.FC = () => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(
-              // @ts-ignore
-              global.exampleViewModule.testJsonJSParse(
-                JSON.stringify(sampleJson),
-              ),
-            );
+            viewRef.current?.foo();
+            // console.log(
+            //   // @ts-ignore
+            //   global.exampleViewModule.testJsonJSParse(
+            //     JSON.stringify(sampleJson),
+            //   ),
+            // );
           }}>
           <View style={styles.innerButtonContainer}>
             <Text>{'view module test'}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <JsiTestViewComponent style={{width:10, height:10, backgroundColor:'red'}}/>
+      <JsiTestViewComponent
+        ref={viewRef}
+        style={{width: 10, height: 10, backgroundColor: 'red'}}
+      />
       <Text
         style={{
           height: 100,
