@@ -14,24 +14,30 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
     const viewRef = React.useRef<any>(null);
 
     const handle = useMemo(() => {
-      return findNodeHandle(viewRef.current);
+      const cHandle = findNodeHandle(viewRef.current);
+      console.log("finding handle = ", cHandle, ' viewRef = ', viewRef.current);
+      return cHandle;
     }, [viewRef.current]);
 
     useImperativeHandle(
       ref,
       () => ({
         foo: () => {
-          console.log('foo');
+
+          console.log("handle = ", handle);
+
+          // @ts-ignore
+          global.exampleViewModule.doSomethingWithView(handle);
           // const i = cloneIndicatorFields(indicator);
           // NativeModules.RNExpertOptionMobilePlot.addIndicator(handle, i);
         },
         bar: () => {
-          console.log('bar');
+          console.log("bar");
           // NativeModules.RNExpertOptionMobilePlot.removeIndicator(handle, index);
         }
       }),
       [handle]
     );
-    return <JsiTestView {...props} ref={viewRef}></JsiTestView>;
+    return <JsiTestView style={{...props.style}} ref={viewRef}></JsiTestView>;
   }
 );
