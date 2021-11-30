@@ -1,7 +1,4 @@
-import {
-  CJsiTestViewComponent, HeaderIconButton,
-  JsiTestView
-} from "react-native-jsi-test-view/src/";
+import {JsiTestViewComponent} from 'react-native-jsi-test-view/src/';
 
 /**
  * Sample React Native App
@@ -154,14 +151,7 @@ const App: React.FC = () => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <HeaderIconButton style={{width: 10, height: 10}} />
-      {/*<JsiTestView*/}
-      {/*  style={{*/}
-      {/*    width: 100,*/}
-      {/*    height: 100,*/}
-      {/*    backgroundColor: 'green',*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <JsiTestViewComponent />
       <Text
         style={{
           height: 100,
