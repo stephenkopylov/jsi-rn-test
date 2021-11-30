@@ -1,3 +1,8 @@
+import {
+  CJsiTestViewComponent, HeaderIconButton,
+  JsiTestView
+} from "react-native-jsi-test-view/src/";
+
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -8,59 +13,18 @@
  * @format
  */
 
-const LARGE_STRING = '123123';
-
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   useColorScheme,
   View,
 } from 'react-native';
 
-import {helloWorld} from './node_modules/react-native-jsi-test/src';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 const sampleJson = {
   test: '123',
   test2: 123,
@@ -178,14 +142,26 @@ const App: React.FC = () => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            // @ts-ignore
-            console.log(global.exampleViewModule.testJsonJSParse(JSON.stringify(sampleJson)));
+            console.log(
+              // @ts-ignore
+              global.exampleViewModule.testJsonJSParse(
+                JSON.stringify(sampleJson),
+              ),
+            );
           }}>
           <View style={styles.innerButtonContainer}>
             <Text>{'view module test'}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
+      <HeaderIconButton style={{width: 10, height: 10}} />
+      {/*<JsiTestView*/}
+      {/*  style={{*/}
+      {/*    width: 100,*/}
+      {/*    height: 100,*/}
+      {/*    backgroundColor: 'green',*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Text
         style={{
           height: 100,

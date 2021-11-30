@@ -4,14 +4,15 @@
 #import <ReactCommon/CallInvoker.h>
 //#import <React/CallInvoker.h>
 #import "react-native-jsi-test-view.h"
-#import "RCTTurboModule.h"
 #import <ReactCommon/RCTTurboModule.h>
 
 @implementation JsiTestView
 
 @synthesize bridge = _bridge;
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(JsiTestView)
+
+RCT_EXPORT_VIEW_PROPERTY(tag, NSNumber)
 
 // Example method for C++
 // See the implementation of the example module in the `cpp` folder
@@ -45,5 +46,10 @@ RCT_EXPORT_METHOD(helloWorld:(nonnull NSNumber*)x
 		});
 	}
 }
+
+-(UIView*)view{
+	return [UIView new];
+}
+
 
 @end

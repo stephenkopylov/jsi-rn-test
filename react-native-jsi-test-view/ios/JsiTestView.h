@@ -1,11 +1,11 @@
 #import <React/RCTBridgeModule.h>
 
 #ifdef __cplusplus
-
 #import "react-native-jsi-test-view.h"
-
 #endif
 
-@interface JsiTestView : NSObject <RCTBridgeModule>
+#import <React/RCTViewManager.h>
+
+@interface JsiTestView : RCTViewManager
 
 @end
