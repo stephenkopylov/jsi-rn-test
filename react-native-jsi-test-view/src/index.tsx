@@ -1,9 +1,9 @@
-import { requireNativeComponent, View } from "react-native";
+import { requireNativeComponent, ViewProps } from "react-native";
 import * as React from 'react';
 
 export const JsiTestView = requireNativeComponent("JsiTestView");
 
-export const JsiTestViewComponent: React.FC<any> = () => {
+export const JsiTestViewComponent: React.FC<ViewProps> = (props) => {
 
-  return <View></View>
+  return (<JsiTestView {...props}></JsiTestView>);
 };

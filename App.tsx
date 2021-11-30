@@ -151,7 +151,7 @@ const App: React.FC = () => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <JsiTestViewComponent />
+      <JsiTestViewComponent style={{width:10, height:10, backgroundColor:'red'}}/>
       <Text
         style={{
           height: 100,
