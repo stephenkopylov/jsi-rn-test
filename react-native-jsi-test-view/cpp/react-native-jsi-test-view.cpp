@@ -29,7 +29,7 @@ void install(Runtime &jsiRuntime, std::shared_ptr <CallInvoker> callInvoker) {
 
 static Value doSomethingWithView(Runtime &rt, TurboModule &turboModule,
 							 const Value *args, size_t arg_count) {
-//	double tag = args[0].getNumber();
+	int tag = args[0].getNumber();
 	
 	
 	return Value::null();

@@ -1,6 +1,6 @@
-import { requireNativeComponent, ViewProps, findNodeHandle } from "react-native";
+import { findNodeHandle, requireNativeComponent, ViewProps } from "react-native";
 import * as React from "react";
-import { Ref, useImperativeHandle, useMemo } from "react";
+import { Ref, useEffect, useImperativeHandle, useMemo, useState } from "react";
 
 export const JsiTestView = requireNativeComponent("JsiTestView");
 
@@ -13,11 +13,13 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
   (props, ref?: Ref<IJsiTestViewComponentRef | any>) => {
     const viewRef = React.useRef<any>(null);
 
-    const handle = useMemo(() => {
-      const cHandle = findNodeHandle(viewRef.current);
-      console.log("finding handle = ", cHandle, ' viewRef = ', viewRef.current);
-      return cHandle;
-    }, [viewRef.current]);
+    const [handle, setHandle] = useState<Number | null>(null);
+
+    useEffect(() => {
+      if (viewRef.current) {
+        setHandle(findNodeHandle(viewRef.current));
+      }
+    }, [viewRef, viewRef.current]);
 
     useImperativeHandle(
       ref,
@@ -28,8 +30,6 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
 
           // @ts-ignore
           global.exampleViewModule.doSomethingWithView(handle);
-          // const i = cloneIndicatorFields(indicator);
-          // NativeModules.RNExpertOptionMobilePlot.addIndicator(handle, i);
         },
         bar: () => {
           console.log("bar");
@@ -38,6 +38,6 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
       }),
       [handle]
     );
-    return <JsiTestView style={{...props.style}} ref={viewRef}></JsiTestView>;
+    return <JsiTestView style={{ ...props.style }} ref={viewRef} />;
   }
 );
