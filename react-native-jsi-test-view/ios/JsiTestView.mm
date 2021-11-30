@@ -5,6 +5,7 @@
 //#import <React/CallInvoker.h>
 #import "react-native-jsi-test-view.h"
 #import <ReactCommon/RCTTurboModule.h>
+#import "JsiTestViewWithTag.h"
 
 @implementation JsiTestView
 
@@ -48,8 +49,7 @@ RCT_EXPORT_METHOD(helloWorld:(nonnull NSNumber*)x
 }
 
 -(UIView*)view{
-	return [UIView new];
+	return [JsiTestViewWithTag new];
 }
-
 
 @end
