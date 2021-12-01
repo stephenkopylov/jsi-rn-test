@@ -10,4 +10,9 @@ public class CustomView extends View {
   public CustomView(Context context) {
     super(context);
   }
+
+  @Override
+  public void setId(int id) {
+    super.setId(id);
+  }
 }

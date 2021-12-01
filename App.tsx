@@ -37,6 +37,7 @@ const sampleJson = {
 const App: React.FC = () => {
   const [result, setResult] = useState<string>('');
   const viewRef = React.useRef<IJsiTestViewComponentRef>(null);
+  const viewRef2 = React.useRef<IJsiTestViewComponentRef>(null);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -144,6 +145,7 @@ const App: React.FC = () => {
         <TouchableWithoutFeedback
           onPress={() => {
             viewRef.current?.foo();
+            viewRef2.current?.foo();
             // console.log(
             //   // @ts-ignore
             //   global.exampleViewModule.testJsonJSParse(
@@ -159,6 +161,10 @@ const App: React.FC = () => {
       <JsiTestViewComponent
         ref={viewRef}
         style={{width: 30, height: 30, backgroundColor: 'purple'}}
+      />
+      <JsiTestViewComponent
+        ref={viewRef2}
+        style={{width: 30, height: 30, backgroundColor: 'orange'}}
       />
       <Text
         style={{
