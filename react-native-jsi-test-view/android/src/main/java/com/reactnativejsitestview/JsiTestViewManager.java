@@ -1,7 +1,5 @@
 package com.reactnativejsitestview;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -16,7 +14,7 @@ public class JsiTestViewManager extends SimpleViewManager {
 
   @NonNull
   @Override
-  protected View createViewInstance(@NonNull ThemedReactContext reactContext) {
-    return new View(reactContext);
+  protected CustomView createViewInstance(@NonNull ThemedReactContext reactContext) {
+    return new CustomView(reactContext);
   }
 }
