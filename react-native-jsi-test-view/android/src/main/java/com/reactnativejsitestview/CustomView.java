@@ -1,23 +1,32 @@
 package com.reactnativejsitestview;
 
 import android.content.Context;
-import android.util.Log;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.facebook.react.ReactRootView;
-
-public class CustomView extends View {
-  private NativeProxy nativeProxy;
+public class CustomView extends ViewGroup {
+  private final NativeProxy nativeProxy;
+  private final TextureView textureView;
 
   public CustomView(Context context, NativeProxy cNativeProxy) {
     super(context);
     nativeProxy = cNativeProxy;
+
+    textureView = new TextureView(context);
+    textureView.setOpaque(false);
+    this.addView(textureView);
+
+  }
+
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    textureView.layout(l,t,r,b);
   }
 
   @Override
   public void setId(int id) {
     super.setId(id);
-    Log.d("Test", String.valueOf(this.getId()));
     nativeProxy.setId(id);
   }
 }
