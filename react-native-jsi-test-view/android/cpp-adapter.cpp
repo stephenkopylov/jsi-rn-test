@@ -23,6 +23,10 @@ struct NativeProxy : jni::JavaClass<NativeProxy> {
                                                    makeNativeMethod("installNativeJsiView",
                                                                     NativeProxy::installNativeJsiView)
                                            });
+        javaClassStatic()->registerNatives({
+                                                   makeNativeMethod("setNativeId",
+                                                                    NativeProxy::setNativeId)
+                                           });
     }
 
 private:
@@ -36,6 +40,11 @@ private:
         LOG("installNativeJsi");
 
         exampleView::install(*jsiRuntime, jsCallInvoker);
+    }
+
+    static void setNativeId(jni::alias_ref<jni::JObject> thiz,
+                                     int id) {
+        LOG("Setting id");
     }
 };
 

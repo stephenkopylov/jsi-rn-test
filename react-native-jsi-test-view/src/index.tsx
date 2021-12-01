@@ -21,6 +21,12 @@ export const JsiTestViewComponent: React.FC<ViewProps> = React.forwardRef(
       }
     }, [viewRef, viewRef.current]);
 
+    useEffect(() => {
+      if (handle) {
+        console.log("handle found ", handle);
+      }
+    }, [handle]);
+
     useImperativeHandle(
       ref,
       () => ({

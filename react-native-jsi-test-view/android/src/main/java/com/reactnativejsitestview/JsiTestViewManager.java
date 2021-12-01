@@ -6,6 +6,12 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 
 public class JsiTestViewManager extends SimpleViewManager {
+  private NativeProxy nativeProxy;
+
+  public JsiTestViewManager(NativeProxy cNativeProxy){
+    nativeProxy = cNativeProxy;
+  }
+
   @NonNull
   @Override
   public String getName() {
@@ -15,6 +21,6 @@ public class JsiTestViewManager extends SimpleViewManager {
   @NonNull
   @Override
   protected CustomView createViewInstance(@NonNull ThemedReactContext reactContext) {
-    return new CustomView(reactContext);
+    return new CustomView(reactContext, nativeProxy);
   }
 }
