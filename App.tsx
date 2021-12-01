@@ -158,7 +158,7 @@ const App: React.FC = () => {
       </View>
       <JsiTestViewComponent
         ref={viewRef}
-        style={{width: 30, height: 30, backgroundColor: 'blue'}}
+        style={{width: 30, height: 30, backgroundColor: 'purple'}}
       />
       <Text
         style={{
